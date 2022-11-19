@@ -7,10 +7,10 @@ readme = "README.md"
 packages = [{include = "todo_escalator"}]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-todoist-api-python = "^2.0.2"
+python = "^3.8"
 pydantic = "^1.10.2"
 python-dotenv = "^0.21.0"
+todoist-api-python = {path = "../todoist-api-python"}
 
 
 [tool.poetry.group.dev.dependencies]
