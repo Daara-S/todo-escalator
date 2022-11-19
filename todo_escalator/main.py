@@ -7,13 +7,12 @@ from todo_escalator.utilities import Priority
 
 config = Config()
 
-api = TodoistAPI(config.api_token.get_secret_value())
 
-
-def escalate_task(task_id: str) -> None:
+def escalate_task(api: TodoistAPI, task_id: str) -> None:
     """
     Raise priority level of tasks with the "@escalate" label.
 
+    :param api: TodoistAPI
     :param task_id: id of a task
     """
     task_obj = api.get_task(task_id=task_id)
@@ -21,18 +20,23 @@ def escalate_task(task_id: str) -> None:
     priority_level = task_obj.priority
 
     if task_date == date.today():
-        if priority_level < Priority.must:
+        if priority_level < Priority.red:
             priority_level += 1
         api.update_task(task_id=task_id, priority=priority_level)
         print(f"Update task \"{task_obj.content}\" to priority {priority_level}.")
 
 
-if __name__ == "__main__":
+def run_classic():
+    api = TodoistAPI(config.api_token.get_secret_value())
+
     try:
         tasks = api.get_tasks()
         for task in tasks:
             if "escalate" in task.labels:
-                escalate_task(task.id)
+                escalate_task(api, task.id)
     except Exception as error:
         print(error)
-    # task_id = "6366231672"
+
+
+if __name__ == "__main__":
+    run_classic()
