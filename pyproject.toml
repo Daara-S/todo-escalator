@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "todo-escalator"
+version = "0.1.0"
+description = "App that can escalate a task priority each time it passes its due date"
+authors = ["Daara Shaw <daara.shaw@gmail.com>"]
+readme = "README.md"
+packages = [{include = "todo_escalator"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+todoist-api-python = "^2.0.2"
+pydantic = "^1.10.2"
+python-dotenv = "^0.21.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
