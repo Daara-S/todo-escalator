@@ -26,7 +26,7 @@ def escalate_task(api: TodoistAPI, task_id: str) -> None:
         print(f"Update task \"{task_obj.content}\" to priority {priority_level}.")
 
 
-def run_classic():
+def run_classic(event=None, context=None):
     api = TodoistAPI(config.api_token.get_secret_value())
 
     try:
@@ -36,6 +36,9 @@ def run_classic():
                 escalate_task(api, task.id)
     except Exception as error:
         print(error)
+    return {
+        "status_code": 200
+    }
 
 
 if __name__ == "__main__":
