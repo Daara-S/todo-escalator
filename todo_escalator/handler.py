@@ -8,8 +8,8 @@ from todo_escalator.utilities import Priority
 
 API_TOKEN = os.getenv("API_TOKEN")
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
 
 def escalate_task(api: TodoistAPI, task_id: str) -> None:
@@ -22,8 +22,8 @@ def escalate_task(api: TodoistAPI, task_id: str) -> None:
     task_obj = api.get_task(task_id=task_id)
     task_date = datetime.strptime(task_obj.due.date, "%Y-%m-%d").date()
     priority_level = task_obj.priority
-
     if task_date == date.today():
+        log.info(f"Parsing task with date: {task_date}, priority_level: {priority_level}.")
         if priority_level < Priority.red:
             priority_level += 1
         api.update_task(task_id=task_id, priority=priority_level)
@@ -32,8 +32,11 @@ def escalate_task(api: TodoistAPI, task_id: str) -> None:
 
 def lambda_handler(event=None, context=None):
     try:
+        log.info("Connecting to API...")
         api = TodoistAPI(API_TOKEN)
+        log.info("Connected.")
         tasks = api.get_tasks(label="escalate")
+        log.info(f"{len(tasks)} tasks to escalate.")
         for task in tasks:
             escalate_task(api, task.id)
     except Exception as error:
@@ -41,7 +44,7 @@ def lambda_handler(event=None, context=None):
 
     current_time = datetime.now().time()
     name = context.function_name
-    logger.info("Your cron function " + name + " ran at " + str(current_time))
+    log.info("Your cron function " + name + " ran at " + str(current_time))
 
     return {
         "status_code": 200
