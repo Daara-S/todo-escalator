@@ -26,7 +26,7 @@ def escalate_task(api: TodoistAPI, task_id: str) -> None:
         print(f"Update task \"{task_obj.content}\" to priority {priority_level}.")
 
 
-def run_classic(event=None, context=None):
+def lambda_handler(event=None, context=None):
     api = TodoistAPI(config.api_token.get_secret_value())
 
     try:
