@@ -5,3 +5,7 @@ package
 *.zip
 .pytest_cache
 .python-version
+.serverless
+*.pyc
+*.pyo
+node_modules

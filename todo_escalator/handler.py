@@ -1,11 +1,15 @@
+import logging
+import os
 from datetime import datetime, date
 
 from todoist_api_python.api import TodoistAPI
 
-from todo_escalator.config import Config
 from todo_escalator.utilities import Priority
 
-config = Config()
+API_TOKEN = os.getenv("API_TOKEN")
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def escalate_task(api: TodoistAPI, task_id: str) -> None:
@@ -27,14 +31,18 @@ def escalate_task(api: TodoistAPI, task_id: str) -> None:
 
 
 def lambda_handler(event=None, context=None):
-    api = TodoistAPI(config.api_token.get_secret_value())
-
     try:
+        api = TodoistAPI(API_TOKEN)
         tasks = api.get_tasks(label="escalate")
         for task in tasks:
             escalate_task(api, task.id)
     except Exception as error:
         print(error)
+
+    current_time = datetime.now().time()
+    name = context.function_name
+    logger.info("Your cron function " + name + " ran at " + str(current_time))
+
     return {
         "status_code": 200
     }

@@ -5,7 +5,7 @@ import pytest
 from todoist_api_python.models import Task
 
 from tests.test_defaults import DEFAULT_TASK_RESPONSE
-from todo_escalator.Handler import escalate_task
+from todo_escalator.handler import escalate_task
 
 
 @dataclass

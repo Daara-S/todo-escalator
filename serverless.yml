@@ -1,0 +1,25 @@
+service: todo-escalator
+
+frameworkVersion: '3'
+
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: eu-west-2
+
+
+functions:
+  cronHandler:
+    handler: handler.lambda_handler
+    events:
+      # Invoke Lambda function every 2nd minute from Mon-Fri
+      - schedule: cron(0 8 * * ? *)
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    usePoetry: true
+    slim: true
