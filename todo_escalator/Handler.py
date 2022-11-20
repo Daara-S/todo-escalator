@@ -30,10 +30,9 @@ def lambda_handler(event=None, context=None):
     api = TodoistAPI(config.api_token.get_secret_value())
 
     try:
-        tasks = api.get_tasks()
+        tasks = api.get_tasks(label="escalate")
         for task in tasks:
-            if "escalate" in task.labels:
-                escalate_task(api, task.id)
+            escalate_task(api, task.id)
     except Exception as error:
         print(error)
     return {
@@ -42,4 +41,4 @@ def lambda_handler(event=None, context=None):
 
 
 if __name__ == "__main__":
-    run_classic()
+    lambda_handler()
