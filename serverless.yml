@@ -1,3 +1,5 @@
+org: daara
+app: todo-escalator
 service: todo-escalator
 
 frameworkVersion: '3'
@@ -11,10 +13,12 @@ provider:
 
 functions:
   cronHandler:
-    handler: handler.lambda_handler
+    handler: todo_escalator.handler.lambda_handler
     events:
       # Invoke Lambda function every 2nd minute from Mon-Fri
       - schedule: cron(0 8 * * ? *)
+    environment:
+      API_TOKEN: "your_api_token"
 
 plugins:
   - serverless-python-requirements
